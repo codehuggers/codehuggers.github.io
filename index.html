@@ -1,69 +1,847 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-  <title>codehuggers</title>
-  <style type="text/css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tuki — Tour bookings on WhatsApp · Codehuggers ehf.</title>
+  <meta name="description"
+    content="Tuki lets small tour operators take and manage bookings through WhatsApp. Customers book by messaging; operators see confirmed bookings in one schedule. Built by Codehuggers ehf., Iceland.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --ink: #10312d;
+      /* deep spruce */
+      --ink-soft: #3d5a55;
+      --paper: #f4f7f6;
+      /* cool paper */
+      --card: #ffffff;
+      --line: #dce5e2;
+      --wa: #25d366;
+      /* WhatsApp green — used only where WhatsApp itself appears */
+      --wa-dark: #128c5e;
+      --bubble-in: #ffffff;
+      --bubble-out: #d9fdd3;
+      --chat-bg: #e7e1d8;
+      --accent: #1f6f64;
+      /* Tuki teal for CTAs/links */
+      --amber: #c98a2d;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
+
+    html {
+      scroll-behavior: smooth
+    }
+
     body {
-      font-family: Helvetica, Arial, Sans-serif;
+      font-family: 'Instrument Sans', system-ui, sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.6;
+      font-size: 17px;
     }
 
-    .container {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translateX(-50%) translateY(-50%);
-      width: 480px;
-      height: 240px;
+    .wrap {
+      max-width: 1080px;
+      margin: 20px auto;
+      padding: 20px 24px
     }
 
-    .logo, .content {
+    h1,
+    h2,
+    h3 {
+      font-family: 'Bricolage Grotesque', 'Instrument Sans', sans-serif;
+      line-height: 1.12;
+      letter-spacing: -0.01em
+    }
+
+    .mono {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-soft)
+    }
+
+    a {
+      color: var(--accent)
+    }
+
+    /* ---------- header ---------- */
+    header {
+      padding: 28px 0;
+      border-bottom: 1px solid var(--line)
+    }
+
+    .header-row {
       display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap
     }
 
-    .logo {
-      margin-top: 45px;
-      height: 120px;
-      font-size: 120%;
+    .wordmark {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-weight: 700;
+      font-size: 28px;
+      color: var(--ink);
+      text-decoration: none
     }
 
-    .content {
-      font-size: 75%;
+    .wordmark span {
+      color: var(--accent)
     }
 
-    .name {
-      color: #999;
-      width: 35%;
+    .byline {
+      font-size: 14px;
+      color: var(--ink-soft)
+    }
+
+    nav {
+      display: flex;
+      gap: 22px;
+      font-size: 15px
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--ink-soft)
+    }
+
+    nav a:hover,
+    nav a:focus-visible {
+      color: var(--ink)
+    }
+
+    /* ---------- hero ---------- */
+    .hero {
+      padding: 72px 0 40px
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 56px;
+      align-items: center
+    }
+
+    .hero h1 {
+      font-size: clamp(34px, 4.6vw, 52px);
+      font-weight: 700;
+      margin-bottom: 20px
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--wa-dark)
+    }
+
+    .hero p.lede {
+      font-size: 19px;
+      color: var(--ink-soft);
+      max-width: 44ch;
+      margin-bottom: 28px
+    }
+
+    .cta {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 13px 26px;
+      border-radius: 10px;
+      font-size: 16px
+    }
+
+    .cta:hover,
+    .cta:focus-visible {
+      background: var(--wa-dark)
+    }
+
+    .cta-note {
+      display: block;
+      margin-top: 12px;
+      font-size: 14px;
+      color: var(--ink-soft)
+    }
+
+    /* ---------- phone mockup (signature) ---------- */
+    .stage {
+      position: relative;
+      display: flex;
+      justify-content: center
+    }
+
+    .phone {
+      width: 320px;
+      background: #0d1418;
+      border-radius: 34px;
+      padding: 10px;
+      box-shadow: 0 24px 60px rgba(16, 49, 45, 0.22), 0 4px 14px rgba(16, 49, 45, 0.14);
+    }
+
+    .screen {
+      background: var(--chat-bg);
+      border-radius: 26px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 560px
+    }
+
+    .chat-head {
+      background: #0f6a5a;
+      color: #fff;
+      padding: 14px 14px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .chat-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--wa);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-weight: 700;
+      color: #0d1418;
+      font-size: 15px;
+      flex-shrink: 0
+    }
+
+    .chat-title {
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.2
+    }
+
+    .chat-sub {
+      font-size: 11.5px;
+      opacity: 0.8
+    }
+
+    .chat-body {
+      flex: 1;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow: hidden
+    }
+
+    .day-chip {
+      align-self: center;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 8px;
+      padding: 3px 10px;
+      font-size: 11px;
+      color: var(--ink-soft)
+    }
+
+    .bubble {
+      max-width: 82%;
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 13.5px;
+      line-height: 1.45;
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
+      opacity: 0;
+      transform: translateY(8px);
+      animation: pop 0.45s ease forwards
+    }
+
+    .in {
+      background: var(--bubble-in);
+      align-self: flex-start;
+      border-top-left-radius: 4px
+    }
+
+    .out {
+      background: var(--bubble-out);
+      align-self: flex-end;
+      border-top-right-radius: 4px
+    }
+
+    .bubble .time {
+      display: block;
       text-align: right;
+      font-size: 10px;
+      color: rgba(0, 0, 0, 0.4);
+      margin-top: 3px
     }
 
-    .slogan, .email, .mobile {
-      color: #333;
-      width: 50%;
-      text-align: left;
-      margin-left: 10px;
-      border-left: 1px solid #ccc;
-      padding-left: 10px;
+    .tick {
+      color: #34b7f1
+    }
+
+    .b1 {
+      animation-delay: 0.2s
+    }
+
+    .b2 {
+      animation-delay: 0.7s
+    }
+
+    .b3 {
+      animation-delay: 1.2s
+    }
+
+    .b4 {
+      animation-delay: 1.7s
+    }
+
+    .b5 {
+      animation-delay: 2.3s
+    }
+
+    @keyframes pop {
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .bubble {
+        animation: none;
+        opacity: 1;
+        transform: none
+      }
+
+      html {
+        scroll-behavior: auto
+      }
+    }
+
+    /* booking card that the conversation becomes */
+    .booking-card {
+      position: absolute;
+      right: -8px;
+      bottom: 22px;
+      width: 250px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px 16px;
+      box-shadow: 0 14px 34px rgba(16, 49, 45, 0.16);
+    }
+
+    .booking-card .mono {
+      font-size: 10.5px;
+      margin-bottom: 6px;
+      color: var(--wa-dark)
+    }
+
+    .booking-card h3 {
+      font-size: 15px;
+      margin-bottom: 8px
+    }
+
+    .slotbar {
+      height: 8px;
+      border-radius: 4px;
+      background: var(--line);
+      overflow: hidden;
+      margin: 6px 0 4px
+    }
+
+    .slotbar i {
+      display: block;
+      height: 100%;
+      width: 83%;
+      background: linear-gradient(90deg, var(--accent), var(--wa))
+    }
+
+    .booking-card small {
+      font-size: 12px;
+      color: var(--ink-soft)
+    }
+
+    .new-row {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--line);
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between
+    }
+
+    .new-row b {
+      font-weight: 600
+    }
+
+    .pill {
+      background: #e9f8ef;
+      color: var(--wa-dark);
+      border-radius: 6px;
+      padding: 1px 8px;
+      font-size: 11.5px;
+      font-weight: 600
+    }
+
+    /* ---------- sections ---------- */
+    section {
+      padding: 64px 0;
+      border-top: 1px solid var(--line)
+    }
+
+    .kicker {
+      margin-bottom: 10px
+    }
+
+    h2 {
+      font-size: clamp(26px, 3.2vw, 34px);
+      margin-bottom: 18px;
+      max-width: 24ch
+    }
+
+    .section-lede {
+      color: var(--ink-soft);
+      max-width: 60ch;
+      margin-bottom: 36px
+    }
+
+    /* how it works — a real sequence, so numbers carry meaning */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px
+    }
+
+    .step {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 24px 22px
+    }
+
+    .step .num {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      color: var(--wa-dark);
+      margin-bottom: 12px
+    }
+
+    .step h3 {
+      font-size: 19px;
+      margin-bottom: 10px
+    }
+
+    .step p {
+      font-size: 15px;
+      color: var(--ink-soft)
+    }
+
+    /* data section — written for a careful reader */
+    .data-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px
+    }
+
+    .data-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 24px 22px
+    }
+
+    .data-card h3 {
+      font-size: 18px;
+      margin-bottom: 10px
+    }
+
+    .data-card ul {
+      list-style: none
+    }
+
+    .data-card li {
+      font-size: 15px;
+      color: var(--ink-soft);
+      padding: 7px 0 7px 26px;
+      position: relative;
+      border-bottom: 1px solid var(--paper)
+    }
+
+    .data-card li:last-child {
+      border-bottom: 0
+    }
+
+    .data-card li::before {
+      content: "";
+      position: absolute;
+      left: 2px;
+      top: 14px;
+      width: 14px;
+      height: 14px;
+      border-radius: 4px;
+      background: #e9f8ef;
+      border: 1px solid var(--wa-dark)
+    }
+
+    .data-card.never li::before {
+      background: #faf0e6;
+      border-color: var(--amber)
+    }
+
+    /* operators */
+    .op-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px
+    }
+
+    /* about / contact */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 40px
+    }
+
+    .fact {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 15px;
+      display: flex;
+      gap: 14px
+    }
+
+    .fact .mono {
+      min-width: 110px;
+      padding-top: 3px
+    }
+
+    /* privacy */
+    #privacy .data-card {
+      margin-bottom: 16px
+    }
+
+    #privacy h3 {
+      font-size: 17px;
+      margin: 26px 0 8px
+    }
+
+    #privacy p,
+    #privacy li {
+      font-size: 15px;
+      color: var(--ink-soft)
+    }
+
+    #privacy ul {
+      padding-left: 20px;
+      margin: 8px 0
+    }
+
+    #privacy .updated {
+      font-size: 13px;
+      color: var(--ink-soft);
+      margin-top: 4px
+    }
+
+    footer {
+      padding: 36px 0 48px;
+      border-top: 1px solid var(--line);
+      font-size: 14px;
+      color: var(--ink-soft);
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap
+    }
+
+    footer a {
+      color: var(--ink-soft)
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 2px;
+      border-radius: 4px
+    }
+
+    @media (max-width:900px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 48px
+      }
+
+      .stage {
+        order: 2
+      }
+
+      .steps,
+      .op-grid,
+      .data-grid,
+      .about-grid {
+        grid-template-columns: 1fr
+      }
+
+      .booking-card {
+        right: 0
+      }
+
+      nav {
+        display: none
+      }
     }
   </style>
 </head>
+
 <body>
-  <div class="container">
-    <div class="logo">
-      <span class="name">codehuggers</span>
-      <span class="slogan">quality through simplicity</span>
+
+  <header>
+    <div class="wrap header-row">
+      <div>
+        <a class="wordmark" href="#top">tuki<span>.</span></a>
+        <div class="byline">by Codehuggers ehf. · Iceland</div>
+      </div>
+      <nav aria-label="Page sections">
+        <a href="#how">How it works</a>
+        <a href="#data">WhatsApp &amp; data</a>
+        <a href="#operators">For operators</a>
+        <a href="#about">Contact</a>
+        <a href="#privacy">Privacy</a>
+      </nav>
     </div>
-    <div class="content">
-      <span class="name">name</span>
-      <span class="email">Bjarki Gudlaugsson</span>
+  </header>
+
+  <main id="top">
+
+    <div class="hero wrap">
+      <div class="hero-grid">
+        <div>
+          <p class="mono kicker">Booking service for small tour operators</p>
+          <h1>Your customers already have the app. It's <em>WhatsApp</em>.</h1>
+          <p class="lede">Tuki takes tour bookings through ordinary WhatsApp conversations. A customer sends a message,
+            Tuki checks your schedule and confirms the seats, and the booking appears in your calendar. No app to
+            install, no forms to abandon.</p>
+          <a class="cta" href="mailto:hello@codehuggers.co?subject=Tuki%20early%20access">Talk to us about early
+            access</a>
+          <span class="cta-note">Currently onboarding a small group of pilot operators in Iceland.</span>
+        </div>
+
+        <div class="stage" aria-label="Example of a booking made over WhatsApp">
+          <div class="phone" role="img"
+            aria-label="Phone showing a WhatsApp chat where a customer books two seats on a whale watching tour and receives a confirmation">
+            <div class="screen">
+              <div class="chat-head">
+                <div class="chat-avatar">NW</div>
+                <div>
+                  <div class="chat-title">Aurora Whale Tours</div>
+                  <div class="chat-sub">Business account · via Tuki</div>
+                </div>
+              </div>
+              <div class="chat-body">
+                <div class="day-chip">Today</div>
+                <div class="bubble in b1">Hi! Do you have space for 2 on tomorrow's 10:00 whale watching tour?<span
+                    class="time">14:02</span></div>
+                <div class="bubble out b2">Hi Anna 👋 Yes — 2 seats are open on Saturday at 10:00 (2,900 kr each). Want
+                  me to book them for you?<span class="time">14:02 <span class="tick">✓✓</span></span></div>
+                <div class="bubble in b3">Yes please!<span class="time">14:03</span></div>
+                <div class="bubble out b4">Booked ✅ 2 seats · Whale Watching · Sat 10:00, Old Harbour. You'll get a
+                  reminder tomorrow evening. Reply here anytime to change or cancel.<span class="time">14:03 <span
+                      class="tick">✓✓</span></span></div>
+                <div class="bubble in b5">Perfect, takk!<span class="time">14:04</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="booking-card" aria-label="The same booking as the operator sees it in their Tuki schedule">
+            <p class="mono">Operator schedule · Sat</p>
+            <h3>Whale Watching · 10:00</h3>
+            <div class="slotbar"><i></i></div>
+            <small>10 of 12 seats booked</small>
+            <div class="new-row"><b>Anna +1</b><span class="pill">just booked</span></div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="content">
-      <span class="name">email</span>
-      <span class="email">bjarki@codehuggers.com</span>
-    </div>
-    <div class="content">
-      <span class="name">mobile</span>
-      <span class="mobile">(+354) 844 5090</span>
-    </div>
-  </div>
+
+    <section id="how" class="wrap">
+      <p class="mono kicker">How it works</p>
+      <h2>A conversation becomes a booking. That's the whole product.</h2>
+      <p class="section-lede">Tuki connects your tour schedule to a WhatsApp business number using the WhatsApp Business
+        Platform. Everything below happens in one thread, in the customer's own language, in the app they check twenty
+        times a day.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="num">Step 1</div>
+          <h3>A customer sends a message</h3>
+          <p>They message your WhatsApp business number the way they'd message a friend: "Any space on Saturday's tour
+            for two?" No account, no download, no booking form.</p>
+        </div>
+        <div class="step">
+          <div class="num">Step 2</div>
+          <h3>Tuki checks and confirms</h3>
+          <p>Tuki reads the request, checks it against your live schedule — capacity, departure times, weather holds —
+            and replies with real availability. When the customer says yes, the seats are reserved and confirmed in the
+            same thread.</p>
+        </div>
+        <div class="step">
+          <div class="num">Step 3</div>
+          <h3>You see it in your schedule</h3>
+          <p>The booking lands in your Tuki calendar with the customer's name, party size, and the conversation behind
+            it. Reminders, changes, and cancellations all flow back through the same chat.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="data" class="wrap">
+      <p class="mono kicker">WhatsApp &amp; your data</p>
+      <h2>What Tuki does with WhatsApp messages — and what it never does</h2>
+      <p class="section-lede">Tuki is built on Meta's WhatsApp Business Platform. We handle conversation data for
+        exactly one purpose: providing the booking service described on this page to the tour operators who are our
+        clients.</p>
+      <div class="data-grid">
+        <div class="data-card">
+          <h3>What we use</h3>
+          <ul>
+            <li>The content of booking conversations — to understand the request, answer with availability, and confirm
+              or change bookings.</li>
+            <li>Customer name and phone number — to attach a booking to the right person and send reminders they've
+              asked for.</li>
+            <li>Message delivery status — to know a confirmation actually reached the customer.</li>
+            <li>Booking details (tour, date, party size) — shown to the tour operator in their schedule.</li>
+          </ul>
+        </div>
+        <div class="data-card never">
+          <h3>What we never do</h3>
+          <ul>
+            <li>Sell or share conversation data with third parties.</li>
+            <li>Use messages for advertising or profiling of any kind.</li>
+            <li>Message customers who haven't messaged the business first or opted in.</li>
+            <li>Keep data longer than needed to provide the service. See the <a href="#privacy">privacy policy</a>.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="operators" class="wrap">
+      <p class="mono kicker">For tour operators</p>
+      <h2>Built for the operator with four boats, not four hundred.</h2>
+      <p class="section-lede">Big booking platforms take commission and own your customer. Tuki is the opposite: your
+        number, your customers, your schedule — with the busywork handled.</p>
+      <div class="op-grid">
+        <div class="step">
+          <h3>Fewer abandoned bookings</h3>
+          <p>Most travellers give up somewhere between your website and a payment form. A WhatsApp thread has nothing to
+            abandon — the question and the confirmation are ten seconds apart.</p>
+        </div>
+        <div class="step">
+          <h3>A schedule that fills itself in</h3>
+          <p>Capacity, departures, and holds live in one calendar. Every confirmed conversation updates it, so you
+            always know what tomorrow morning looks like.</p>
+        </div>
+        <div class="step">
+          <h3>Nothing to install, nothing to train</h3>
+          <p>Your customers use WhatsApp they already have. You use a simple schedule in the browser. Setup is a
+            conversation with us, not a software project.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="wrap">
+      <p class="mono kicker">About &amp; contact</p>
+      <div class="about-grid">
+        <div>
+          <h2>Made by Codehuggers</h2>
+          <p class="section-lede" style="margin-bottom:16px">Codehuggers ehf. is an Icelandic software company building
+            Tuki and the scheduling engine behind it. Tuki is currently in development, working with a small group of
+            pilot tour operators. If you run tours and spend your evenings answering booking messages by hand, we'd like
+            to hear from you.</p>
+          <a class="cta" href="mailto:hello@codehuggers.co">hello@codehuggers.co</a>
+        </div>
+        <div>
+          <div class="fact"><span class="mono">Company</span><span>Codehuggers ehf.</span></div>
+          <div class="fact"><span class="mono">Address</span><span>Miðskógum 1, 225 Álftanes, Iceland</span></div>
+          <div class="fact"><span class="mono">Email</span><span><a
+                href="mailto:hello@codehuggers.co">hello@codehuggers.co</a></span></div>
+          <div class="fact"><span class="mono">Product</span><span>Tuki — tour bookings on WhatsApp</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="privacy" class="wrap">
+      <p class="mono kicker">Privacy policy</p>
+      <h2>Privacy policy</h2>
+      <p class="updated">Codehuggers ehf. · Last updated 26 July 2026</p>
+
+      <h3>Who we are</h3>
+      <p>Codehuggers ehf. ("we", "us") is an Icelandic company, registered at Miðskógum 1, 225 Álftanes, Iceland. We
+        provide Tuki, a booking service that lets tour operators (our clients) receive and manage bookings through the
+        WhatsApp Business Platform. For personal data processed through Tuki, the tour operator is the data controller
+        for their customer relationships and Codehuggers ehf. acts as a processor on their behalf; for data about
+        operators themselves and visitors to this website, Codehuggers ehf. is the controller.</p>
+
+      <h3>What data we process</h3>
+      <ul>
+        <li><b>Booking conversations:</b> the content of WhatsApp messages sent to a participating operator's business
+          number, used to understand booking requests and respond.</li>
+        <li><b>Contact details:</b> the customer's WhatsApp phone number and the name they provide, used to attach
+          bookings to the right person.</li>
+        <li><b>Booking records:</b> tour, date, time, party size, and booking status, shown to the operator in their
+          schedule.</li>
+        <li><b>Delivery metadata:</b> message delivery and read status provided by the WhatsApp Business Platform, used
+          to confirm that booking confirmations arrived.</li>
+        <li><b>Operator account data:</b> the operator's business details, schedule, and settings needed to run the
+          service.</li>
+      </ul>
+
+      <h3>Why and on what basis</h3>
+      <p>We process this data solely to provide the booking service: answering availability questions, confirming and
+        changing bookings, sending booking reminders the customer has requested, and showing operators their schedule.
+        The legal basis is the performance of the booking the customer has requested (GDPR Art. 6(1)(b)) and the
+        operator's legitimate interest in managing their bookings (Art. 6(1)(f)). We do not use this data for
+        advertising or profiling, and we do not sell it.</p>
+
+      <h3>Messaging</h3>
+      <p>Tuki only messages people who have first messaged a participating business on WhatsApp, or who have otherwise
+        opted in to booking updates. Every conversation can be used to change or cancel a booking, and customers can
+        stop messages at any time by saying so in the chat or blocking the number.</p>
+
+      <h3>Where data lives and who sees it</h3>
+      <p>Messages are transmitted through Meta's WhatsApp Business Platform and are subject to <a
+          href="https://www.whatsapp.com/legal/business-data-processing-terms" rel="noopener">Meta's business data
+          processing terms</a>. Booking data is stored on infrastructure within the EEA. Data is visible only to the
+        tour operator whose customer the data concerns and to us, to the extent needed to operate and support the
+        service.</p>
+
+      <h3>Retention</h3>
+      <p>Booking records are kept for as long as the operator needs them for their bookings and any legal obligations
+        (such as accounting), and are deleted when no longer needed. Conversation content is retained only as long as
+        required to provide the service and handle the booking it concerns.</p>
+
+      <h3>Your rights</h3>
+      <p>Under the GDPR and the Icelandic Data Protection Act, you can request access to, correction of, or deletion of
+        your personal data, object to processing, and lodge a complaint with the Icelandic Data Protection Authority
+        (Persónuvernd). For requests about a booking, you can also contact the tour operator directly. To exercise any
+        of these rights with us, email <a href="mailto:hello@codehuggers.co">hello@codehuggers.co</a>.</p>
+
+      <h3>Changes</h3>
+      <p>If this policy changes in a way that matters, we will update this page and the date above.</p>
+    </section>
+
+  </main>
+
+  <footer class="wrap">
+    <span>© 2026 Codehuggers ehf · Midskogar 1, 225 Alftanes, Iceland</span>
+    <span><a href="#privacy">Privacy policy</a> · <a href="mailto:hello@codehuggers.co">hello@codehuggers.co</a></span>
+  </footer>
+
 </body>
+
 </html>
